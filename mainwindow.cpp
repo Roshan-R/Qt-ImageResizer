@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->input_Width->setValidator(new QIntValidator);
     ui->input_Height->setValidator(new QIntValidator);
-    ui->input_Size->setValidator(new QIntValidator);
 }
 
 MainWindow::~MainWindow()
@@ -33,11 +32,10 @@ void MainWindow::ChangeAvatar()
 bool MainWindow::CheckFields(){
     int label_Width = ui->input_Width->text().toInt();
     int label_Height = ui->input_Height->text().toInt();
-    int label_Size = ui->input_Size->text().toInt();
     QString format = ui->comboBox->currentText();
     qInfo()<<label_Width<<label_Height<<format;
     if( label_Width && label_Height && !MainWindow::GetImage().isNull() && !format.isNull()){
-        MainWindow::CopyThings(label_Width, label_Height, label_Size, format);
+        MainWindow::CopyThings(label_Width, label_Height,  format);
         return true;
     }
     else

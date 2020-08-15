@@ -25,8 +25,9 @@ public:
         return this->ImageFile;
     }
     void SaveImage(){
+        QString option = "Save File (." + this->format + ")";
         QString filepath = QFileDialog::getSaveFileName(this,
-                                tr("Save Image"), "/home/rosh/Pictures", tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
+                                tr("Save Image"), "", tr(format.toLocal8Bit().constData()));
         if(!filepath.isNull()){
             if (this->format == "jpeg"){
                 this->ImageFile.save(filepath, "JPEG");
@@ -34,19 +35,16 @@ public:
             else if(this->format == "png"){
                 this->ImageFile.save(filepath, "PNG");
             }
-            /*
             else if(this->format == "pdf"){
                 qInfo()<<"I'm here !";
                 QPdfWriter pdfWriter(filepath);
                 QPainter painter(&pdfWriter);
-                quint32 iYPos = 10;
-
-                painter.drawImage(0, iYPos, this->ImageFile,
-                                  this->ImageFile.width(), this->ImageFile.height());
+                const QPoint imageCoordinates(0,0);
+                painter.drawImage(imageCoordinates, this->ImageFile);
             }
-            */
         }
     }
+
     void ChangeImage() {
         QString temp = QFileDialog::getOpenFileName(this,
                                 tr("Open Image"), "/home/rosh/Pictures", tr("Image Files (*.png *.jpg *jpeg *.bmp)"));
@@ -85,13 +83,12 @@ public:
         qInfo()<<this->ImageFile.size();
     }
 
-    void CopyThings(int input_Width, int input_Height, int input_Size, QString format){
+    void CopyThings(int input_Width, int input_Height,  QString format){
         this->input_Width = input_Width;
         this->input_Height = input_Height;
-        this->input_Size = input_Size;
         this->format = format;
         qInfo()<<"Copied Stuff"<<this->input_Width
-              <<this->input_Height<<this->input_Size<<this->format;
+              <<this->input_Height<<this->format;
     }
 
     MainWindow(QWidget *parent = nullptr);
@@ -108,7 +105,6 @@ private:
     QImage ImageFile;
     int input_Height;
     int input_Width;
-    int input_Size;
     int lowestSize;
     QString format;
     Ui::MainWindow *ui;
