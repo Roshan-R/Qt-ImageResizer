@@ -25,9 +25,14 @@ public:
         return this->ImageFile;
     }
     void SaveImage(){
-        QString option = "Save File (." + this->format + ")";
-        QString filepath = QFileDialog::getSaveFileName(this,
-                                tr("Save Image"), "", tr(format.toLocal8Bit().constData()));
+        QString option = "Save File (*." + this->format + ")";
+        QFileDialog filedialog(this);
+        filedialog.setFileMode(QFileDialog::AnyFile);
+        filedialog.setNameFilter(option.toLocal8Bit().constData());
+        filedialog.setDefaultSuffix(this->format);
+        filedialog.exec();
+        QString filepath = filedialog.selectedFiles().first();
+
         if(!filepath.isNull()){
             if (this->format == "jpeg"){
                 this->ImageFile.save(filepath, "JPEG");
@@ -36,11 +41,19 @@ public:
                 this->ImageFile.save(filepath, "PNG");
             }
             else if(this->format == "pdf"){
-                qInfo()<<"I'm here !";
+                /*qInfo()<<"I'm here !";
+
+                QSize size;
+                size.setHeight(this->input_Height);
+                size.setHeight(this->input_Width);
+
+                QPageSize pagesize(&size, "Custom", );
+
                 QPdfWriter pdfWriter(filepath);
+                pdfWriter->setPageSize()
                 QPainter painter(&pdfWriter);
                 const QPoint imageCoordinates(0,0);
-                painter.drawImage(imageCoordinates, this->ImageFile);
+                painter.drawImage(imageCoordinates, this->ImageFile);*/
             }
         }
     }
